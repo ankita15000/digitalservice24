@@ -1,0 +1,704 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{--black:#0a0a0a;--white:#fff;--g50:#f9f9f9;--g100:#f2f2f2;--g200:#e5e5e5;--g400:#9a9a9a;--g600:#555;--gold:#c9a84c;--gold2:#e8c97a;--tr:.36s cubic-bezier(.25,.46,.45,.94);--wa:#25D366}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:#0a0a0a;overflow-x:hidden}
+h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;line-height:1.1}
+a{text-decoration:none;color:inherit;cursor:pointer}
+button{cursor:pointer}
+nav{position:fixed;top:0;left:0;right:0;z-index:999;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.07);transition:box-shadow .2s}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:-.02em;cursor:pointer}
+.logo-sq{width:26px;height:26px;background:#0a0a0a;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:#c9a84c}
+.nav-links{display:flex;gap:2px;align-items:center}
+.nav-links button{background:none;border:none;cursor:pointer;padding:7px 13px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;color:#555;border-radius:7px;transition:all .18s}
+.nav-links button:hover,.nav-links button.act{color:#0a0a0a;background:#f2f2f2}
+.nav-cta{background:#0a0a0a!important;color:#fff!important;font-weight:600!important;border-radius:9px!important;transition:all .3s!important}
+.nav-cta:hover{background:#c9a84c!important;color:#0a0a0a!important;transform:translateY(-1px);box-shadow:0 4px 14px rgba(201,168,76,.35)!important}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:#0a0a0a;border-radius:2px;transition:all .3s}
+.hopen span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hopen span:nth-child(2){opacity:0}
+.hopen span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.page{display:none;min-height:100vh;padding-top:60px}
+.page.active{display:block}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.875rem;border-radius:11px;cursor:pointer;transition:all var(--tr);border:none;outline:none;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn-p{background:#0a0a0a;color:#fff}
+.btn-p:hover{background:#c9a84c;color:#0a0a0a;box-shadow:0 6px 20px rgba(201,168,76,.3)}
+.btn-o{background:transparent;color:#0a0a0a;border:2px solid #0a0a0a}
+.btn-o:hover{background:#0a0a0a;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.btn-g{background:#c9a84c;color:#0a0a0a}
+.btn-g:hover{background:#e8c97a;box-shadow:0 6px 20px rgba(201,168,76,.35)}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1ebe5d;box-shadow:0 6px 22px rgba(37,211,102,.35)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.2)}
+.btn:active{transform:translateY(0) scale(.98)}
+.hero{min-height:calc(100vh - 60px);display:flex;align-items:center;padding:40px 32px;position:relative;overflow:hidden;background:#fff}
+.hbg1{position:absolute;width:600px;height:600px;background:#c9a84c;border-radius:50%;filter:blur(90px);opacity:.05;top:-200px;right:-150px;animation:flt 8s ease-in-out infinite}
+.hbg2{position:absolute;width:350px;height:350px;background:#222;border-radius:50%;filter:blur(90px);opacity:.05;bottom:-100px;left:5%;animation:flt 10s ease-in-out infinite reverse}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.025) 1px,transparent 1px);background-size:55px 55px}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
+.hero-content{max-width:580px;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:9px;padding:6px 15px;background:#f2f2f2;border:1px solid #e5e5e5;border-radius:100px;font-size:.75rem;font-weight:600;color:#555;letter-spacing:.05em;margin-bottom:26px}
+.pdot{width:7px;height:7px;background:#22c55e;border-radius:50%;position:relative}
+.pdot::before{content:'';position:absolute;inset:-3px;background:rgba(34,197,94,.25);border-radius:50%;animation:pls 2s infinite}
+@keyframes pls{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:0}}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.04em;margin-bottom:18px}
+.hero h1 em{font-style:normal;position:relative;display:inline-block}
+.hero h1 em::after{content:'';position:absolute;bottom:3px;left:0;right:0;height:3px;background:#c9a84c;border-radius:2px}
+.hero-sub{font-size:1rem;color:#555;line-height:1.75;margin-bottom:34px;max-width:460px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800}
+.stat-lbl{font-size:.76rem;color:#9a9a9a;font-weight:500}
+.stat-div{width:1px;background:#e5e5e5}
+.hcards{position:absolute;right:4%;top:50%;transform:translateY(-50%);width:40%;max-width:460px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hcard{background:#fff;border:1px solid #e5e5e5;border-radius:18px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:transform var(--tr)}
+.hcard:hover{transform:translateY(-5px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
+.hcard.tall{grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between}
+.hcard-ic{width:40px;height:40px;background:#f2f2f2;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:12px}
+.hcard h3{font-size:.9rem;font-weight:700;margin-bottom:5px}
+.hcard p{font-size:.76rem;color:#555;line-height:1.5}
+.metric{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1;margin-bottom:3px}
+.m-lbl{font-size:.72rem;color:#9a9a9a}
+.bars{display:flex;align-items:flex-end;gap:5px;height:48px;margin-top:14px}
+.bar{flex:1;border-radius:3px}
+.marquee{padding:16px 0;background:#0a0a0a;overflow:hidden}
+.mtrack{display:flex;animation:mq 20s linear infinite;white-space:nowrap}
+.mitem{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.06em;text-transform:uppercase}
+.sep{color:#c9a84c}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.section{padding:80px 32px}
+.sec-alt{background:#f9f9f9}
+.stag{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;background:#f2f2f2;border-radius:100px;font-size:.72rem;font-weight:600;color:#555;letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px}
+.stag::before{content:'';width:5px;height:5px;background:#c9a84c;border-radius:50%}
+.stag-dk{background:rgba(255,255,255,.07);color:rgba(255,255,255,.5)}
+.stag-dk::before{background:#c9a84c}
+.sec-title{font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:800;letter-spacing:-.035em;margin-bottom:12px}
+.sec-sub{font-size:.95rem;color:#555;line-height:1.72;max-width:500px}
+.tgold{color:#c9a84c}
+.tc{text-align:center}
+.ma{margin-left:auto;margin-right:auto}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
+.svc-card{background:#fff;border:1px solid #e5e5e5;border-radius:15px;padding:24px 20px;transition:all var(--tr);position:relative;overflow:hidden;cursor:default}
+.svc-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:#c9a84c;transform:scaleX(0);transition:transform var(--tr)}
+.svc-card:hover{border-color:transparent;box-shadow:0 12px 36px rgba(0,0,0,.1);transform:translateY(-4px)}
+.svc-card:hover::before{transform:scaleX(1)}
+.svc-ic{width:48px;height:48px;background:#f2f2f2;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:14px;transition:all var(--tr)}
+.svc-card:hover .svc-ic{background:#0a0a0a}
+.svc-card h3{font-size:.92rem;font-weight:700;margin-bottom:7px}
+.svc-card p{font-size:.8rem;color:#555;line-height:1.6}
+.port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.port-item{border-radius:15px;overflow:hidden;position:relative;cursor:pointer;transition:transform var(--tr)}
+.port-item:hover{transform:scale(1.02)}
+.port-item:first-child{grid-column:span 2}
+.port-ov{position:absolute;inset:0;background:rgba(10,10,10,.82);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;opacity:0;transition:opacity var(--tr)}
+.port-item:hover .port-ov{opacity:1}
+.port-ov h3{color:#fff;font-size:.95rem;margin-bottom:4px}
+.port-ov p{color:rgba(255,255,255,.6);font-size:.76rem}
+.port-tag{display:inline-block;padding:3px 10px;background:#c9a84c;color:#0a0a0a;border-radius:100px;font-size:.68rem;font-weight:700;margin-bottom:8px}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.testi-card{background:#fff;border:1px solid #e5e5e5;border-radius:15px;padding:28px;transition:all var(--tr)}
+.testi-card:hover{box-shadow:0 10px 32px rgba(0,0,0,.1);transform:translateY(-4px)}
+.testi-card.dark{background:#0a0a0a;border-color:#0a0a0a}
+.testi-card.dark .tt{color:rgba(255,255,255,.65)}
+.testi-card.dark .tn{color:#fff}
+.testi-card.dark .tr2{color:rgba(255,255,255,.4)}
+.stars{color:#c9a84c;font-size:.85rem;margin-bottom:14px}
+.tt{font-size:.85rem;color:#555;line-height:1.75;margin-bottom:20px;font-style:italic}
+.tauth{display:flex;align-items:center;gap:12px}
+.tav{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.tn{font-size:.85rem;font-weight:700}
+.tr2{font-size:.74rem;color:#9a9a9a}
+.cta-band{background:#0a0a0a;border-radius:22px;padding:56px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px;margin:60px 32px;position:relative;overflow:hidden}
+.cta-band::before{content:'';position:absolute;width:320px;height:320px;background:#c9a84c;border-radius:50%;filter:blur(90px);opacity:.1;right:-80px;top:-80px}
+.cta-band h2{font-size:clamp(1.5rem,2.5vw,2.2rem);color:#fff;margin-bottom:10px}
+.cta-band p{font-size:.9rem;color:rgba(255,255,255,.5);max-width:360px}
+.cta-btns{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap}
+.phero{padding:100px 32px 60px;background:#0a0a0a;position:relative;overflow:hidden;text-align:center}
+.phero::before{content:'';position:absolute;width:450px;height:450px;background:#c9a84c;border-radius:50%;filter:blur(110px);opacity:.07;left:50%;top:50%;transform:translate(-50%,-50%)}
+.phero h1{color:#fff;font-size:clamp(2.1rem,4vw,3.4rem);letter-spacing:-.04em;margin-bottom:16px}
+.phero p{color:rgba(255,255,255,.5);font-size:1rem;max-width:480px;margin:0 auto}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.dark-card{background:#0a0a0a;border-radius:20px;padding:40px 32px;color:#fff;position:relative;overflow:hidden}
+.dark-card::before{content:'';position:absolute;width:250px;height:250px;background:#c9a84c;border-radius:50%;filter:blur(70px);opacity:.09;right:-50px;top:-50px}
+.big-num{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;color:rgba(255,255,255,.05);position:absolute;top:16px;right:20px;line-height:1}
+.gbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);padding:5px 12px;border-radius:100px;font-size:.72rem;color:#c9a84c;font-weight:600;letter-spacing:.05em;margin-bottom:20px}
+.dark-card h2{font-size:1.6rem;margin-bottom:12px}
+.dark-card p{color:rgba(255,255,255,.55);font-size:.87rem;line-height:1.75}
+.float-c{background:#fff;border:1px solid #e5e5e5;border-radius:14px;padding:16px;box-shadow:0 8px 28px rgba(0,0,0,.1);position:absolute;display:flex;align-items:center;gap:12px}
+.fc1{bottom:-16px;right:-16px}
+.fc2{top:40px;left:-16px}
+.fc-ic{width:36px;height:36px;background:#f2f2f2;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.fc-val{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;line-height:1}
+.fc-lbl{font-size:.7rem;color:#9a9a9a}
+.mvv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.mvv-card{border-radius:18px;padding:32px 28px;transition:all var(--tr);cursor:default}
+.mvv-card:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(0,0,0,.12)}
+.mvv-c1{background:#0a0a0a}
+.mvv-c1 h3{color:#fff}
+.mvv-c1 p{color:rgba(255,255,255,.55)}
+.mvv-c2{background:#f9f9f9;border:1px solid #e5e5e5}
+.mvv-c3{background:#c9a84c}
+.mvv-c3 p{color:rgba(0,0,0,.65)}
+.mvv-icon{font-size:1.8rem;margin-bottom:16px}
+.mvv-card h3{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+.mvv-card p{font-size:.85rem;line-height:1.75}
+.vals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.val-item{background:#fff;border-radius:14px;padding:24px;border-left:4px solid #c9a84c;transition:all var(--tr);border-top-left-radius:0;border-bottom-left-radius:0}
+.val-item:hover{box-shadow:0 8px 24px rgba(0,0,0,.09);transform:translateX(4px)}
+.val-item h4{font-size:.92rem;font-weight:700;margin-bottom:7px}
+.val-item p{font-size:.8rem;color:#555;line-height:1.65}
+.counters{background:#0a0a0a;padding:48px 32px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.06)}
+.ctr-item{text-align:center;padding:24px 16px;border-right:1px solid rgba(255,255,255,.06)}
+.ctr-item:last-child{border-right:none}
+.ctr-val{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;color:#c9a84c;line-height:1;margin-bottom:8px}
+.ctr-lbl{font-size:.82rem;color:rgba(255,255,255,.4);font-weight:500}
+.reason-list{display:flex;flex-direction:column;gap:16px}
+.reason-item{display:flex;gap:16px;padding:20px;border-radius:14px;border:1px solid #e5e5e5;background:#fff;transition:all var(--tr);cursor:default}
+.reason-item:hover{border-color:transparent;box-shadow:0 10px 30px rgba(0,0,0,.1);transform:translateX(5px)}
+.reason-ic{width:48px;height:48px;background:#f2f2f2;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;transition:all var(--tr)}
+.reason-item:hover .reason-ic{background:#0a0a0a}
+.reason-item h4{font-size:.9rem;font-weight:700;margin-bottom:5px}
+.reason-item p{font-size:.8rem;color:#555;line-height:1.6}
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+.diff-card{background:#fff;border-radius:18px;padding:28px 22px;border:1px solid #e5e5e5;transition:all var(--tr);position:relative;cursor:default}
+.diff-card:hover{border-color:transparent;box-shadow:0 12px 36px rgba(0,0,0,.1);transform:translateY(-4px)}
+.diff-n{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:#f2f2f2;line-height:1;position:absolute;top:16px;right:20px}
+.diff-card h3{font-size:.92rem;font-weight:700;margin-bottom:8px;position:relative}
+.diff-card p{font-size:.82rem;color:#555;line-height:1.7;position:relative}
+.compare-table{width:100%;border-collapse:collapse;margin-top:40px;border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.09)}
+.compare-table th{padding:16px 20px;text-align:left;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;background:#0a0a0a;color:#fff}
+.compare-table th:nth-child(2){color:#c9a84c}
+.compare-table td{padding:14px 20px;font-size:.82rem;border-bottom:1px solid #f2f2f2;background:#fff;color:#555}
+.compare-table td:nth-child(1){font-weight:600;color:#0a0a0a}
+.compare-table td:nth-child(2){background:rgba(201,168,76,.04);font-weight:600;color:#0a0a0a}
+.compare-table tr:last-child td{border-bottom:none}
+.chk{color:#22c55e;font-weight:700}
+.crs{color:#ef4444}
+.prt{color:#c9a84c}
+.testi-hero{background:#0a0a0a;border-radius:22px;padding:52px 48px;text-align:center;position:relative;overflow:hidden;margin:0 32px}
+.testi-hero::before{content:'"';position:absolute;font-family:'Syne',sans-serif;font-size:18rem;font-weight:800;color:rgba(255,255,255,.02);top:-70px;left:16px;line-height:1}
+.testi-hero blockquote{font-size:clamp(1rem,2vw,1.4rem);color:#fff;font-style:italic;line-height:1.65;max-width:640px;margin:0 auto 24px;position:relative}
+.t-attr{color:rgba(255,255,255,.5);font-size:.85rem}
+.t-attr strong{color:#c9a84c}
+.contact-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:48px;align-items:start}
+.cc-card{display:flex;align-items:center;gap:16px;padding:18px 20px;background:#fff;border:1px solid #e5e5e5;border-radius:14px;transition:all var(--tr);margin-bottom:12px;color:#0a0a0a;cursor:pointer}
+.cc-card:hover{border-color:transparent;box-shadow:0 8px 24px rgba(0,0,0,.1);transform:translateX(3px)}
+.cc-icon{width:48px;height:48px;background:#0a0a0a;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#c9a84c;font-size:1.1rem;flex-shrink:0;transition:all var(--tr)}
+.cc-card:hover .cc-icon{background:#c9a84c;color:#0a0a0a}
+.cc-lbl{font-size:.72rem;color:#9a9a9a;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.cc-val{font-size:.92rem;font-weight:700}
+.form-panel{background:#fff;border:1px solid #e5e5e5;border-radius:20px;padding:40px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.form-panel h3{font-size:1.3rem;font-weight:700;margin-bottom:6px}
+.form-panel>p{font-size:.85rem;color:#555;margin-bottom:28px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.fg label{font-size:.77rem;font-weight:600;color:#0a0a0a}
+.fg input,.fg textarea,.fg select{padding:12px 15px;border:1.5px solid #e5e5e5;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.88rem;color:#0a0a0a;background:#f9f9f9;transition:all .18s;outline:none;resize:none;cursor:text}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:#0a0a0a;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
+.fg textarea{height:110px}
+.fg select{cursor:pointer}
+.chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.chip{padding:6px 13px;background:#f2f2f2;border:1.5px solid #e5e5e5;border-radius:100px;font-size:.76rem;font-weight:600;color:#555;cursor:pointer;transition:all .18s;user-select:none}
+.chip:hover{border-color:#0a0a0a;color:#0a0a0a}
+.chip.sel{background:#0a0a0a;border-color:#0a0a0a;color:#fff}
+.submit-btn{width:100%;justify-content:center;font-size:.95rem;padding:14px;border-radius:13px;margin-top:4px}
+.form-note{text-align:center;font-size:.74rem;color:#9a9a9a;margin-top:12px}
+.success-box{display:none;flex-direction:column;align-items:center;text-align:center;padding:40px 20px;gap:14px}
+.success-ic{width:70px;height:70px;background:rgba(34,197,94,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.success-box h3{font-size:1.4rem;font-weight:700}
+.success-box p{font-size:.88rem;color:#555;max-width:300px}
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:1000;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(37,211,102,.45);transition:all var(--tr);border:none;font-size:1.5rem}
+.wa-float:hover{transform:scale(1.12) translateY(-2px);box-shadow:0 8px 28px rgba(37,211,102,.5)}
+.wa-float::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(37,211,102,.3);animation:wa-ring 2s ease-in-out infinite}
+@keyframes wa-ring{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.12);opacity:0}}
+.wa-banner{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 100%);border-radius:20px;padding:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0 32px 32px;border:1px solid rgba(37,211,102,.2);position:relative;overflow:hidden}
+.wa-banner::before{content:'';position:absolute;width:200px;height:200px;background:#25D366;border-radius:50%;filter:blur(80px);opacity:.08;right:-40px;top:-40px}
+.wa-banner-ic{width:56px;height:56px;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+.wa-banner-text h3{color:#fff;font-size:1.2rem;font-weight:700;margin-bottom:6px}
+.wa-banner-text p{color:rgba(255,255,255,.55);font-size:.87rem;line-height:1.6}
+.wa-banner-right{display:flex;flex-direction:column;gap:10px;align-items:flex-end;flex-shrink:0}
+.map-ph{border-radius:20px;height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;margin-top:40px;overflow:hidden;position:relative}
+.map-pin{width:52px;height:52px;background:#0a0a0a;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;animation:bounce 2s ease-in-out infinite;box-shadow:0 4px 14px rgba(0,0,0,.15);position:relative;z-index:2}
+.map-pin span{transform:rotate(45deg);font-size:1.1rem}
+@keyframes bounce{0%,100%{transform:rotate(-45deg) translateY(0)}50%{transform:rotate(-45deg) translateY(-10px)}}
+.map-ph h3{font-size:1.1rem;font-weight:700;margin-top:12px;position:relative;z-index:2}
+.map-ph p{font-size:.85rem;color:#555;position:relative;z-index:2}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:48px}
+.faq-item{background:#fff;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;cursor:pointer}
+.faq-q{padding:18px 20px;font-weight:700;font-size:.85rem;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background .18s;user-select:none}
+.faq-q:hover{background:#f9f9f9}
+.faq-ico{width:26px;height:26px;background:#f2f2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;transition:all .2s;font-style:normal}
+.faq-item.fopen .faq-ico{background:#0a0a0a;color:#c9a84c;transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .38s ease}
+.faq-item.fopen .faq-a{max-height:160px}
+.faq-a-in{padding:0 20px 18px;font-size:.82rem;color:#555;line-height:1.7}
+.svc-full-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+footer{background:#0a0a0a;color:#fff;padding:56px 32px 24px}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:24px}
+.ft-brand .logo{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin-bottom:14px}
+.ft-brand p{font-size:.84rem;color:rgba(255,255,255,.45);line-height:1.7;max-width:260px;margin-bottom:20px}
+.social-wrap{display:flex;gap:9px}
+.sc-a{width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:9px;display:flex;align-items:center;justify-content:center;transition:all .18s;cursor:pointer;text-decoration:none;color:#fff}
+.sc-a:hover{transform:translateY(-2px)}
+.sc-fb:hover{background:#1877F2}
+.sc-ig:hover{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.sc-li:hover{background:#0A66C2}
+.sc-wa:hover{background:#25D366}
+.ft-col h4{font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px}
+.ft-col a,.ft-col span{display:block;font-size:.84rem;color:rgba(255,255,255,.6);padding:4px 0;transition:color .18s;cursor:pointer}
+.ft-col a:hover,.ft-col span:hover{color:#c9a84c}
+.ft-ci{display:flex;align-items:center;gap:9px;font-size:.84rem;color:rgba(255,255,255,.6);margin-bottom:10px}
+.ft-ci-ic{width:30px;height:30px;background:rgba(255,255,255,.06);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:rgba(255,255,255,.3);flex-wrap:wrap;gap:8px}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.img-fill{width:100%;height:100%;object-fit:cover}
+@media(max-width:1100px){.hcards{display:none}.hero-content{max-width:100%}.svc-grid{grid-template-columns:repeat(2,1fr)}.ft-grid{grid-template-columns:1fr 1fr}.ft-brand{grid-column:1/-1}}
+@media(max-width:900px){.svc-full-grid{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr;gap:40px}}
+@media(max-width:768px){.mvv-grid{grid-template-columns:1fr}.testi-grid{grid-template-columns:1fr}.contact-layout{grid-template-columns:1fr}.diff-grid{grid-template-columns:1fr 1fr}.counters{grid-template-columns:1fr 1fr}.cta-band{flex-direction:column;text-align:center;padding:40px 28px}.cta-btns{flex-direction:column;width:100%}.faq-grid{grid-template-columns:1fr}.port-grid{grid-template-columns:1fr 1fr}.port-item:first-child{grid-column:span 2}.fc2{display:none}.wa-banner{flex-direction:column;text-align:center;padding:32px 24px}.wa-banner-right{align-items:center;width:100%}}
+@media(max-width:560px){.svc-grid{grid-template-columns:1fr}.port-grid{grid-template-columns:1fr}.port-item:first-child{grid-column:span 1}.vals-grid{grid-template-columns:1fr}.diff-grid{grid-template-columns:1fr}.counters{grid-template-columns:1fr 1fr}.hero-stats{flex-wrap:wrap}.form-row{grid-template-columns:1fr}.svc-full-grid{grid-template-columns:1fr}.section{padding:60px 20px}.cta-band{margin:40px 20px;padding:32px 20px}.testi-hero{margin:0 20px;padding:36px 24px}.vals-grid{grid-template-columns:1fr 1fr}}
+</style>
+
+<div id="app">
+<button class="wa-float" onclick="openWA()" title="Chat on WhatsApp">💬</button>
+<nav id="navbar">
+  <div class="nav-logo" onclick="goTo('home')"><div class="logo-sq">DS</div>Digital Service 24</div>
+  <div class="nav-links" id="navLinks">
+    <button onclick="goTo('home')" class="act" id="nav-home">Home</button>
+    <button onclick="goTo('services')" id="nav-services">Services</button>
+    <button onclick="goTo('about')" id="nav-about">About Us</button>
+    <button onclick="goTo('whyus')" id="nav-whyus">Why Choose Us</button>
+    <button onclick="goTo('contact')" class="nav-cta" id="nav-contact">Contact Us</button>
+  </div>
+  <button class="hamburger" id="hbg" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ══════════ HOME ══════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hbg1"></div><div class="hbg2"></div><div class="hgrid"></div>
+    <div class="hero-content">
+      <div class="badge"><div class="pdot"></div>Premium Digital Agency — Since 2026</div>
+      <h1>Grow Your Business <em>Digitally</em> with Digital Service 24</h1>
+      <p class="hero-sub">We craft result-driven digital strategies that transform your brand, amplify your reach, and deliver measurable growth — fast.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-p" onclick="goTo('contact')">&#8594; Get Started</button>
+        <button class="btn btn-o" onclick="goTo('services')">Explore Services</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num"><span data-c="150" data-s="+">0</span></div><div class="stat-lbl">Projects Delivered</div></div>
+        <div class="stat-div"></div>
+        <div><div class="stat-num"><span data-c="98" data-s="%">0</span></div><div class="stat-lbl">Client Satisfaction</div></div>
+        <div class="stat-div"></div>
+        <div><div class="stat-num"><span data-c="7">0</span></div><div class="stat-lbl">Core Services</div></div>
+      </div>
+    </div>
+    <div class="hcards">
+      <div class="hcard tall">
+        <div><div class="hcard-ic">📈</div><h3>Growth Analytics</h3><p>Real-time performance tracking</p></div>
+        <div><div class="metric">+247%</div><div class="m-lbl">Average ROI increase</div><div class="bars"><div class="bar" style="height:35%;background:#f2f2f2"></div><div class="bar" style="height:52%;background:#c9a84c"></div><div class="bar" style="height:68%;background:#f2f2f2"></div><div class="bar" style="height:85%;background:#0a0a0a"></div><div class="bar" style="height:100%;background:#c9a84c"></div></div></div>
+      </div>
+      <div class="hcard"><div class="hcard-ic">🎯</div><h3>Digital Marketing</h3><p>Targeted strategies that convert</p></div>
+      <div class="hcard"><div class="hcard-ic">💻</div><h3>Web Development</h3><p>Modern, high-performance websites</p></div>
+      <div class="hcard"><div class="hcard-ic">📲</div><h3>App Development</h3><p>Cross-platform mobile solutions</p></div>
+    </div>
+  </section>
+
+  <div class="marquee"><div class="mtrack"><span class="mitem"><span class="sep">★</span>Digital Marketing<span class="sep">★</span>Web Development<span class="sep">★</span>App Development<span class="sep">★</span>SEO Optimization<span class="sep">★</span>Social Media<span class="sep">★</span>Graphic Design<span class="sep">★</span>Software Dev<span class="sep">★</span></span><span class="mitem"><span class="sep">★</span>Digital Marketing<span class="sep">★</span>Web Development<span class="sep">★</span>App Development<span class="sep">★</span>SEO Optimization<span class="sep">★</span>Social Media<span class="sep">★</span>Graphic Design<span class="sep">★</span>Software Dev<span class="sep">★</span></span></div></div>
+
+  <section class="section">
+    <div class="rv"><div class="stag">What We Do</div><h2 class="sec-title">Our Core Services</h2><p class="sec-sub">From idea to execution, end-to-end digital solutions tailored to your business goals.</p></div>
+    <div class="svc-grid" style="margin-top:40px">
+      <div class="svc-card rv"><div class="svc-ic">🌐</div><h3>Website Development</h3><p>Fast, modern, conversion-optimized websites built with cutting-edge tech.</p></div>
+      <div class="svc-card rv"><div class="svc-ic">⚙️</div><h3>Software Development</h3><p>Custom software that automates and scales your business operations.</p></div>
+      <div class="svc-card rv"><div class="svc-ic">📣</div><h3>Digital Marketing</h3><p>Data-driven campaigns that maximize reach, engagement, and conversions.</p></div>
+      <div class="svc-card rv"><div class="svc-ic">📱</div><h3>Social Media Mgmt</h3><p>Strategic content, community building, and brand growth across platforms.</p></div>
+      <div class="svc-card rv"><div class="svc-ic">🔍</div><h3>SEO Optimization</h3><p>Rank higher on search engines and drive consistent organic traffic.</p></div>
+      <div class="svc-card rv"><div class="svc-ic">🎨</div><h3>Graphic Designing</h3><p>Striking visuals and brand identities that captivate your audience.</p></div>
+      <div class="svc-card rv"><div class="svc-ic">📲</div><h3>App Development</h3><p>iOS & Android apps engineered for performance and great UX.</p></div>
+      <div class="svc-card rv" style="background:#0a0a0a;border-color:#0a0a0a;display:flex;flex-direction:column;justify-content:center;gap:12px">
+        <p style="color:rgba(255,255,255,.6);font-size:.85rem">Ready to start?</p>
+        <button class="btn btn-g" style="padding:10px 18px;font-size:.8rem" onclick="goTo('services')">View All →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO with SVG images -->
+  <section class="section sec-alt">
+    <div class="rv tc" style="max-width:560px;margin:0 auto"><div class="stag">Portfolio</div><h2 class="sec-title">Projects We're Proud Of</h2><p class="sec-sub ma">A glimpse into the digital experiences we've crafted for brands across industries.</p></div>
+    <div class="port-grid">
+      <!-- E-commerce -->
+      <div class="port-item rv" style="aspect-ratio:16/9">
+        <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="600" height="340" fill="#0f0f0f"/><rect x="0" y="0" width="600" height="340" fill="url(#g1)"/><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#16213e"/></linearGradient></defs><rect x="40" y="30" width="520" height="280" rx="12" fill="#1e2a3a" opacity=".8"/><rect x="40" y="30" width="520" height="50" rx="12" fill="#0f3460"/><circle cx="70" cy="55" r="8" fill="#e94560"/><circle cx="95" cy="55" r="8" fill="#f5a623"/><circle cx="120" cy="55" r="8" fill="#2ecc71"/><rect x="160" y="43" width="200" height="24" rx="4" fill="#0a1628"/><rect x="490" y="43" width="60" height="24" rx="4" fill="#e94560"/><rect x="60" y="100" width="140" height="180" rx="8" fill="#0d1b2a"/><rect x="60" y="100" width="140" height="100" rx="8" fill="#c9a84c" opacity=".3"/><text x="130" y="158" text-anchor="middle" fill="#c9a84c" font-size="28" font-family="sans-serif">👗</text><rect x="65" y="210" width="80" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="65" y="228" width="55" height="8" rx="3" fill="#c9a84c" opacity=".8"/><rect x="65" y="244" width="100" height="26" rx="5" fill="#e94560"/><rect x="220" y="100" width="140" height="180" rx="8" fill="#0d1b2a"/><rect x="220" y="100" width="140" height="100" rx="8" fill="#4a90e2" opacity=".3"/><text x="290" y="158" text-anchor="middle" fill="#4a90e2" font-size="28" font-family="sans-serif">👟</text><rect x="225" y="210" width="80" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="225" y="228" width="55" height="8" rx="3" fill="#c9a84c" opacity=".8"/><rect x="225" y="244" width="100" height="26" rx="5" fill="#e94560"/><rect x="380" y="100" width="160" height="210" rx="8" fill="#0a1628"/><rect x="390" y="110" width="140" height="60" rx="6" fill="#1a3a5c"/><text x="460" y="148" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif">🛒 Cart (3)</text><rect x="390" y="182" width="140" height="30" rx="5" fill="#2ecc71"/><text x="460" y="202" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif">Checkout →</text><rect x="390" y="222" width="60" height="8" rx="3" fill="#fff" opacity=".4"/><rect x="390" y="238" width="100" height="8" rx="3" fill="#fff" opacity=".3"/><rect x="390" y="254" width="80" height="8" rx="3" fill="#c9a84c" opacity=".6"/></svg>
+        <div class="port-ov"><div class="port-tag">Web Development</div><h3>E-commerce Platform</h3><p>Full-stack with custom CMS & payment integration</p></div>
+      </div>
+      <!-- Digital Marketing -->
+      <div class="port-item rv" style="aspect-ratio:16/9">
+        <svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#8b5e1a"/></linearGradient></defs><rect width="300" height="170" fill="url(#g2)"/><rect x="20" y="20" width="260" height="130" rx="10" fill="rgba(0,0,0,.25)"/><text x="150" y="55" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">CAMPAIGN RESULTS</text><rect x="35" y="65" width="230" height="2" fill="rgba(255,255,255,.2)"/><rect x="35" y="80" width="20" height="50" rx="3" fill="rgba(255,255,255,.3)"/><rect x="65" y="65" width="20" height="65" rx="3" fill="rgba(255,255,255,.4)"/><rect x="95" y="55" width="20" height="75" rx="3" fill="rgba(255,255,255,.5)"/><rect x="125" y="45" width="20" height="85" rx="3" fill="rgba(255,255,255,.6)"/><rect x="155" y="30" width="20" height="100" rx="3" fill="#fff"/><rect x="185" y="20" width="20" height="110" rx="3" fill="#fff"/><text x="230" y="60" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">+300%</text><text x="230" y="76" fill="rgba(255,255,255,.7)" font-size="8" font-family="sans-serif">Traffic Growth</text><circle cx="230" cy="100" r="22" fill="rgba(255,255,255,.15)"/><text x="230" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold" font-family="sans-serif">ROI</text><text x="230" y="117" text-anchor="middle" fill="#fff" font-size="8" font-family="sans-serif">247%↑</text></svg>
+        <div class="port-ov"><div class="port-tag">Digital Marketing</div><h3>Brand Growth Campaign</h3><p>300% traffic increase in 90 days</p></div>
+      </div>
+      <!-- App -->
+      <div class="port-item rv" style="aspect-ratio:16/9">
+        <svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#2d1b69"/></linearGradient></defs><rect width="300" height="170" fill="url(#g3)"/><rect x="95" y="10" width="70" height="125" rx="10" fill="#0f0f23" stroke="#c9a84c" stroke-width="1.5"/><rect x="100" y="20" width="60" height="8" rx="4" fill="#c9a84c" opacity=".4"/><rect x="105" y="35" width="50" height="30" rx="6" fill="#1e1e4a"/><text x="130" y="56" text-anchor="middle" fill="#c9a84c" font-size="16" font-family="sans-serif">🏃</text><rect x="105" y="72" width="50" height="6" rx="3" fill="#c9a84c" opacity=".6"/><rect x="105" y="83" width="35" height="5" rx="2" fill="#fff" opacity=".3"/><rect x="105" y="94" width="50" height="20" rx="4" fill="#c9a84c"/><text x="130" y="108" text-anchor="middle" fill="#000" font-size="8" font-weight="bold" font-family="sans-serif">START</text><circle cx="130" cy="122" r="3" fill="#c9a84c"/><rect x="30" y="40" width="55" height="40" rx="8" fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.3)" stroke-width="1"/><text x="57" y="58" text-anchor="middle" fill="#c9a84c" font-size="14" font-family="sans-serif">10K+</text><text x="57" y="71" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="7" font-family="sans-serif">Active Users</text><rect x="215" y="40" width="55" height="40" rx="8" fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.3)" stroke-width="1"/><text x="242" y="58" text-anchor="middle" fill="#c9a84c" font-size="14" font-family="sans-serif">4.8★</text><text x="242" y="71" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="7" font-family="sans-serif">App Rating</text><text x="150" y="153" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="8" font-family="sans-serif">Available on iOS & Android</text></svg>
+        <div class="port-ov"><div class="port-tag">App Development</div><h3>Fitness Tracking App</h3><p>Cross-platform app with 10K+ active users</p></div>
+      </div>
+      <!-- Branding -->
+      <div class="port-item rv" style="aspect-ratio:4/3">
+        <svg viewBox="0 0 300 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f0f0f"/><stop offset="100%" stop-color="#1a1200"/></linearGradient></defs><rect width="300" height="225" fill="url(#g4)"/><circle cx="150" cy="95" r="60" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".3"/><circle cx="150" cy="95" r="45" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".5"/><polygon points="150,55 165,85 198,85 173,105 183,135 150,115 117,135 127,105 102,85 135,85" fill="none" stroke="#c9a84c" stroke-width="1.5"/><polygon points="150,65 162,88 187,88 167,104 174,128 150,112 126,128 133,104 113,88 138,88" fill="#c9a84c" opacity=".8"/><text x="150" y="100" text-anchor="middle" fill="#0a0a0a" font-size="16" font-weight="bold" font-family="sans-serif">DS</text><text x="150" y="168" text-anchor="middle" fill="#c9a84c" font-size="12" font-weight="bold" font-family="sans-serif" letter-spacing="4">FINTECH</text><text x="150" y="183" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="8" font-family="sans-serif" letter-spacing="2">BRAND IDENTITY</text><rect x="60" y="195" width="180" height="1" fill="rgba(201,168,76,.3)"/><rect x="30" y="205" width="30" height="12" rx="3" fill="#c9a84c"/><rect x="68" y="205" width="40" height="12" rx="3" fill="rgba(201,168,76,.4)"/><rect x="116" y="205" width="20" height="12" rx="3" fill="rgba(201,168,76,.25)"/><rect x="144" y="205" width="50" height="12" rx="3" fill="rgba(201,168,76,.15)"/><rect x="202" y="205" width="30" height="12" rx="3" fill="rgba(201,168,76,.3)"/></svg>
+        <div class="port-ov"><div class="port-tag">Branding</div><h3>Corporate Identity</h3><p>Complete brand refresh for a fintech startup</p></div>
+      </div>
+      <!-- SEO -->
+      <div class="port-item rv" style="aspect-ratio:4/3">
+        <svg viewBox="0 0 300 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="g5" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#0a1628"/><stop offset="100%" stop-color="#0f2a4a"/></linearGradient></defs><rect width="300" height="225" fill="url(#g5)"/><rect x="20" y="20" width="260" height="35" rx="6" fill="#0d1b2a" stroke="#1e3a5c" stroke-width="1"/><circle cx="38" cy="37" r="8" fill="none" stroke="#c9a84c" stroke-width="1.5"/><line x1="44" y1="43" x2="50" y2="49" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><rect x="58" y="30" width="120" height="14" rx="3" fill="#1e3a5c"/><rect x="20" y="65" width="260" height="22" rx="4" fill="#0f3460"/><rect x="28" y="71" width="8" height="8" rx="1" fill="#4a90e2"/><rect x="42" y="73" width="80" height="4" rx="2" fill="#4a90e2" opacity=".7"/><rect x="20" y="95" width="260" height="22" rx="4" fill="#0d1b2a" stroke="#1e3a5c" stroke-width=".5"/><rect x="28" y="101" width="8" height="8" rx="1" fill="#c9a84c"/><rect x="42" y="103" width="100" height="4" rx="2" fill="#c9a84c" opacity=".7"/><rect x="20" y="125" width="260" height="22" rx="4" fill="#0d1b2a"/><rect x="28" y="131" width="8" height="8" rx="1" fill="#fff" opacity=".3"/><rect x="42" y="133" width="90" height="4" rx="2" fill="#fff" opacity=".3"/><rect x="60" y="160" width="180" height="50" rx="8" fill="rgba(201,168,76,.1)" stroke="rgba(201,168,76,.4)" stroke-width="1"/><text x="150" y="181" text-anchor="middle" fill="#c9a84c" font-size="13" font-weight="bold" font-family="sans-serif">#1 Ranked</text><text x="150" y="197" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="8" font-family="sans-serif">50+ Competitive Keywords</text></svg>
+        <div class="port-ov"><div class="port-tag">SEO</div><h3>Local SEO Domination</h3><p>#1 rankings across 50+ keywords</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="rv tc" style="max-width:560px;margin:0 auto"><div class="stag">Testimonials</div><h2 class="sec-title">What Our Clients Say</h2></div>
+    <div class="testi-grid">
+      <div class="testi-card rv"><div class="stars">★★★★★</div><p class="tt">"Digital Service 24 completely transformed our online presence. Within 3 months, our traffic tripled and conversion rate doubled. Truly exceptional work."</p><div class="tauth"><div class="tav" style="background:#f0e6cc;color:#c9a84c">RK</div><div><div class="tn">Rajesh Kumar</div><div class="tr2">CEO, TechVentures India</div></div></div></div>
+      <div class="testi-card dark rv"><div class="stars">★★★★★</div><p class="tt">"The social media strategy generated more leads in one month than we'd had in a year. Creative, professional, genuinely invested in your success."</p><div class="tauth"><div class="tav" style="background:rgba(255,255,255,.1);color:#c9a84c">SP</div><div><div class="tn">Shreya Patel</div><div class="tr2">Founder, StyleHub</div></div></div></div>
+      <div class="testi-card rv"><div class="stars">★★★★★</div><p class="tt">"Outstanding software team. They built our custom CRM from scratch, on time and within budget. Saved us hours every single week."</p><div class="tauth"><div class="tav" style="background:#e8f0fe;color:#1a1a1a">AM</div><div><div class="tn">Arjun Mehta</div><div class="tr2">Director, Global Logistics Co.</div></div></div></div>
+    </div>
+  </section>
+  <div class="cta-band rv"><div><h2>Ready to Scale Your Business?</h2><p>Let's build something remarkable together. Get a free consultation today.</p></div><div class="cta-btns"><button class="btn btn-g" onclick="goTo('contact')">Get Free Consultation</button><button class="btn btn-ghost" onclick="goTo('services')">View Services</button></div></div>
+  <div style="height:40px"></div><div id="fh"></div>
+</div>
+
+<!-- ══════════ SERVICES ══════════ -->
+<div class="page" id="page-services">
+  <section class="phero"><div class="stag stag-dk" style="margin-bottom:20px">What We Offer</div><h1>Our Services</h1><p>Comprehensive digital solutions engineered to elevate your brand and deliver measurable results.</p></section>
+  <section class="section">
+    <div class="rv tc" style="max-width:600px;margin:0 auto"><div class="stag">7 Core Services</div><h2 class="sec-title">Everything You Need to Succeed Digitally</h2></div>
+    <div class="svc-full-grid">
+      <div class="diff-card rv" style="grid-column:span 2"><div class="diff-n">04</div><div style="font-size:1.6rem;margin-bottom:14px">📱</div><h3>Social Media Management</h3><p style="font-size:.87rem;color:#555;line-height:1.75;margin-bottom:18px">We take full ownership of your social media presence — from strategy and content creation to scheduling, community management, and growth analytics across all major platforms.</p><div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px"><div style="font-size:.8rem;color:#555;display:flex;align-items:center;gap:8px"><span style="color:#c9a84c">✓</span>Multi-platform management (Instagram, Facebook, LinkedIn, X)</div><div style="font-size:.8rem;color:#555;display:flex;align-items:center;gap:8px"><span style="color:#c9a84c">✓</span>Professional content creation & scheduling</div><div style="font-size:.8rem;color:#555;display:flex;align-items:center;gap:8px"><span style="color:#c9a84c">✓</span>Audience growth & engagement strategies</div></div><button class="btn btn-p" style="font-size:.82rem;padding:10px 18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv"><div class="diff-n">01</div><div style="font-size:1.6rem;margin-bottom:14px">🌐</div><h3>Website Development</h3><p>Fast, modern, stunning websites that don't just look great — they convert visitors into loyal customers.</p><button class="btn btn-o" style="font-size:.78rem;padding:8px 14px;margin-top:18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv"><div class="diff-n">02</div><div style="font-size:1.6rem;margin-bottom:14px">⚙️</div><h3>Software Development</h3><p>Custom software solutions built to solve your unique business challenges — scalable, secure, and maintainable.</p><button class="btn btn-o" style="font-size:.78rem;padding:8px 14px;margin-top:18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv"><div class="diff-n">03</div><div style="font-size:1.6rem;margin-bottom:14px">📣</div><h3>Digital Marketing</h3><p>Data-driven campaigns that put your brand in front of the right audience at the right time for maximum ROI.</p><button class="btn btn-o" style="font-size:.78rem;padding:8px 14px;margin-top:18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv"><div class="diff-n">05</div><div style="font-size:1.6rem;margin-bottom:14px">🔍</div><h3>SEO Optimization</h3><p>Rank higher, attract organic traffic, and dominate your niche. Technical and content SEO for sustainable results.</p><button class="btn btn-o" style="font-size:.78rem;padding:8px 14px;margin-top:18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv"><div class="diff-n">06</div><div style="font-size:1.6rem;margin-bottom:14px">🎨</div><h3>Graphic Designing</h3><p>Visually compelling designs that communicate your brand story instantly — from logos to full identity systems.</p><button class="btn btn-o" style="font-size:.78rem;padding:8px 14px;margin-top:18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv"><div class="diff-n">07</div><div style="font-size:1.6rem;margin-bottom:14px">📲</div><h3>App Development</h3><p>iOS and Android apps engineered for performance, scalability, and an exceptional user experience your users will love.</p><button class="btn btn-o" style="font-size:.78rem;padding:8px 14px;margin-top:18px" onclick="goTo('contact')">Get a Quote →</button></div>
+      <div class="diff-card rv" style="background:#f9f9f9;border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:220px"><div style="font-size:2rem">🤝</div><h3 style="font-size:.95rem">Need a Custom Solution?</h3><p style="font-size:.82rem;color:#555">We build bespoke strategies tailored to your specific needs.</p><button class="btn btn-p" style="font-size:.8rem;padding:10px 18px;margin-top:4px" onclick="goTo('contact')">Talk to Us</button></div>
+    </div>
+  </section>
+  <section class="section sec-alt">
+    <div class="rv tc"><div class="stag">How We Work</div><h2 class="sec-title">Our Simple Process</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;position:relative">
+      <div style="position:absolute;top:38px;left:10%;right:10%;height:2px;background:#e5e5e5"></div>
+      <div class="rv tc" style="position:relative;z-index:1"><div style="width:76px;height:76px;border-radius:50%;background:#fff;border:2px solid #e5e5e5;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin:0 auto 20px;box-shadow:0 2px 10px rgba(0,0,0,.07);transition:all .3s;cursor:default" onmouseover="this.style.background='#0a0a0a';this.style.color='#c9a84c'" onmouseout="this.style.background='#fff';this.style.color='#0a0a0a'">01</div><h4 style="font-size:.95rem;font-weight:700;margin-bottom:8px">Discovery Call</h4><p style="font-size:.8rem;color:#555;line-height:1.65">We understand your business, goals, and challenges in a detailed strategy session.</p></div>
+      <div class="rv tc" style="position:relative;z-index:1"><div style="width:76px;height:76px;border-radius:50%;background:#fff;border:2px solid #e5e5e5;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin:0 auto 20px;box-shadow:0 2px 10px rgba(0,0,0,.07);transition:all .3s;cursor:default" onmouseover="this.style.background='#0a0a0a';this.style.color='#c9a84c'" onmouseout="this.style.background='#fff';this.style.color='#0a0a0a'">02</div><h4 style="font-size:.95rem;font-weight:700;margin-bottom:8px">Strategy & Planning</h4><p style="font-size:.8rem;color:#555;line-height:1.65">We craft a tailored roadmap with clear deliverables and success metrics.</p></div>
+      <div class="rv tc" style="position:relative;z-index:1"><div style="width:76px;height:76px;border-radius:50%;background:#fff;border:2px solid #e5e5e5;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin:0 auto 20px;box-shadow:0 2px 10px rgba(0,0,0,.07);transition:all .3s;cursor:default" onmouseover="this.style.background='#0a0a0a';this.style.color='#c9a84c'" onmouseout="this.style.background='#fff';this.style.color='#0a0a0a'">03</div><h4 style="font-size:.95rem;font-weight:700;margin-bottom:8px">Execution</h4><p style="font-size:.8rem;color:#555;line-height:1.65">We design, develop, and deploy every element with precision and care.</p></div>
+      <div class="rv tc" style="position:relative;z-index:1"><div style="width:76px;height:76px;border-radius:50%;background:#fff;border:2px solid #e5e5e5;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin:0 auto 20px;box-shadow:0 2px 10px rgba(0,0,0,.07);transition:all .3s;cursor:default" onmouseover="this.style.background='#0a0a0a';this.style.color='#c9a84c'" onmouseout="this.style.background='#fff';this.style.color='#0a0a0a'">04</div><h4 style="font-size:.95rem;font-weight:700;margin-bottom:8px">Review & Optimise</h4><p style="font-size:.8rem;color:#555;line-height:1.65">We monitor, report, and continuously optimise for maximum impact.</p></div>
+    </div>
+  </section>
+  <div class="cta-band rv"><div><h2>Let's Build Something Remarkable</h2><p>Ready to take your digital presence to the next level?</p></div><div class="cta-btns"><button class="btn btn-g" onclick="goTo('contact')">Start a Project</button><button class="btn btn-ghost" onclick="goTo('whyus')">Why Choose Us</button></div></div>
+  <div style="height:40px"></div><div id="fs"></div>
+</div>
+
+<!-- ══════════ ABOUT ══════════ -->
+<div class="page" id="page-about">
+  <section class="phero"><div class="stag stag-dk" style="margin-bottom:20px">Our Story</div><h1>Who We Are</h1><p>A passionate team of digital experts committed to driving real, measurable growth for every business we partner with.</p></section>
+  <section class="section">
+    <div class="split">
+      <div class="rv">
+        <div class="stag">Est. January 2026</div>
+        <h2 class="sec-title">Built on a Bold Belief: <span class="tgold">Every Business Deserves to Thrive Digitally</span></h2>
+        <p style="color:#555;font-size:.95rem;line-height:1.8;margin-top:18px;margin-bottom:16px">Digital Service 24 was founded with a singular purpose — to bridge the gap between ambitious businesses and the digital growth they deserve. We are not just a service provider; we are your strategic digital partner, invested in your long-term success.</p>
+        <p style="color:#555;font-size:.95rem;line-height:1.8;margin-bottom:32px">We are committed to delivering high-quality digital solutions that drive real business growth. Every strategy we craft, every line of code we write, and every campaign we launch is guided by one goal — your results.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="goTo('contact')">Work With Us →</button>
+          <button class="btn btn-o" onclick="goTo('whyus')">Why Choose Us →</button>
+        </div>
+      </div>
+      <div class="rv" style="position:relative;padding:20px 20px 36px">
+        <div class="dark-card"><div class="big-num">24</div><div class="gbadge">★ &nbsp;Est. Jan 1, 2026</div><h2 style="font-size:1.6rem;margin-bottom:12px">Digital Service 24</h2><p>From day one, we set out to redefine what a digital agency can be — transparent, results-focused, and genuinely passionate about client success. We combine strategic thinking with creative execution to deliver outcomes that matter.</p></div>
+        <div class="float-c fc1"><div class="fc-ic">🏆</div><div><div class="fc-val">150+</div><div class="fc-lbl">Projects Delivered</div></div></div>
+        <div class="float-c fc2"><div class="fc-ic">⭐</div><div><div class="fc-val">4.9/5</div><div class="fc-lbl">Avg. Client Rating</div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section sec-alt">
+    <div class="rv tc"><div class="stag">Our Core</div><h2 class="sec-title">Mission, Vision & Values</h2></div>
+    <div class="mvv-grid">
+      <div class="mvv-card mvv-c1 rv"><div class="mvv-icon">🎯</div><h3>Our Mission</h3><p>To empower businesses of all sizes with premium digital solutions that generate real, measurable results. We exist to remove barriers between ambition and achievement in the digital world.</p></div>
+      <div class="mvv-card mvv-c2 rv"><div class="mvv-icon">🔭</div><h3>Our Vision</h3><p>To become the most trusted digital growth partner for businesses across India and beyond — known for our integrity, innovation, and the transformative impact we deliver for every client.</p></div>
+      <div class="mvv-card mvv-c3 rv"><div class="mvv-icon">💎</div><h3>Our Values</h3><p>Transparency in everything we do. Excellence in every deliverable. A relentless commitment to client satisfaction. We don't just meet expectations — we exceed them, every single time.</p></div>
+    </div>
+  </section>
+  <!-- TEAM SECTION with SVG illustrations -->
+  <section class="section">
+    <div class="rv tc"><div class="stag">Our People</div><h2 class="sec-title">The Team Behind the Work</h2><p class="sec-sub ma tc" style="max-width:520px">Our diverse team of strategists, designers, developers, and marketers brings deep expertise and genuine passion to every project.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px">
+      <div class="rv" style="background:#fff;border:1px solid #e5e5e5;border-radius:20px;overflow:hidden;transition:all var(--tr)" onmouseover="this.style.boxShadow='0 12px 36px rgba(0,0,0,.12)';this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
+        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block"><rect width="200" height="160" fill="#1a1a1a"/><circle cx="100" cy="60" r="35" fill="#2d2d2d"/><circle cx="100" cy="52" r="18" fill="#c9a84c" opacity=".9"/><rect x="65" y="75" width="70" height="40" rx="10" fill="#c9a84c" opacity=".7"/><rect x="30" y="115" width="140" height="30" rx="6" fill="#0f0f0f"/><rect x="50" y="122" width="60" height="8" rx="2" fill="#fff" opacity=".15"/><rect x="120" y="122" width="40" height="8" rx="2" fill="#c9a84c" opacity=".4"/></svg>
+        <div style="padding:20px"><h4 style="font-size:1rem;font-weight:700;margin-bottom:4px">Rahul S.</h4><span style="font-size:.78rem;color:#9a9a9a">CEO & Strategist</span></div>
+      </div>
+      <div class="rv" style="background:#fff;border:1px solid #e5e5e5;border-radius:20px;overflow:hidden;transition:all var(--tr)" onmouseover="this.style.boxShadow='0 12px 36px rgba(0,0,0,.12)';this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
+        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block"><rect width="200" height="160" fill="#0f2a4a"/><circle cx="100" cy="60" r="35" fill="#1e3a5c"/><circle cx="100" cy="52" r="18" fill="#4a90e2" opacity=".9"/><rect x="65" y="75" width="70" height="40" rx="10" fill="#4a90e2" opacity=".5"/><rect x="20" y="100" width="60" height="40" rx="6" fill="#0a1628"/><rect x="28" y="108" width="44" height="4" rx="2" fill="#4a90e2" opacity=".6"/><rect x="28" y="116" width="36" height="4" rx="2" fill="#fff" opacity=".2"/><rect x="28" y="124" width="40" height="4" rx="2" fill="#fff" opacity=".2"/><rect x="120" y="100" width="60" height="40" rx="6" fill="#0a1628"/><rect x="128" y="108" width="44" height="4" rx="2" fill="#4a90e2" opacity=".6"/><rect x="128" y="116" width="36" height="4" rx="2" fill="#fff" opacity=".2"/><rect x="128" y="124" width="40" height="4" rx="2" fill="#fff" opacity=".2"/></svg>
+        <div style="padding:20px"><h4 style="font-size:1rem;font-weight:700;margin-bottom:4px">Priya M.</h4><span style="font-size:.78rem;color:#9a9a9a">Lead Developer</span></div>
+      </div>
+      <div class="rv" style="background:#fff;border:1px solid #e5e5e5;border-radius:20px;overflow:hidden;transition:all var(--tr)" onmouseover="this.style.boxShadow='0 12px 36px rgba(0,0,0,.12)';this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
+        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block"><rect width="200" height="160" fill="#1a0a00"/><circle cx="100" cy="60" r="35" fill="#2d1500"/><circle cx="100" cy="52" r="18" fill="#e8c97a" opacity=".9"/><rect x="65" y="75" width="70" height="40" rx="10" fill="#e8c97a" opacity=".5"/><circle cx="55" cy="90" r="18" fill="#c9a84c" opacity=".6"/><circle cx="145" cy="90" r="18" fill="#c9a84c" opacity=".4"/><circle cx="100" cy="115" r="22" fill="#c9a84c" opacity=".3"/><polygon points="100,82 110,98 90,98" fill="#fff" opacity=".5"/></svg>
+        <div style="padding:20px"><h4 style="font-size:1rem;font-weight:700;margin-bottom:4px">Aryan K.</h4><span style="font-size:.78rem;color:#9a9a9a">Creative Director</span></div>
+      </div>
+      <div class="rv" style="background:#fff;border:1px solid #e5e5e5;border-radius:20px;overflow:hidden;transition:all var(--tr)" onmouseover="this.style.boxShadow='0 12px 36px rgba(0,0,0,.12)';this.style.transform='translateY(-4px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
+        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block"><rect width="200" height="160" fill="#0a1a0a"/><circle cx="100" cy="60" r="35" fill="#1a2d1a"/><circle cx="100" cy="52" r="18" fill="#2ecc71" opacity=".9"/><rect x="65" y="75" width="70" height="40" rx="10" fill="#2ecc71" opacity=".4"/><rect x="30" y="90" width="45" height="6" rx="3" fill="#2ecc71" opacity=".5"/><rect x="125" y="90" width="45" height="6" rx="3" fill="#2ecc71" opacity=".5"/><rect x="30" y="102" width="140" height="4" rx="2" fill="#2ecc71" opacity=".2"/><rect x="30" y="112" width="140" height="4" rx="2" fill="#2ecc71" opacity=".2"/><rect x="30" y="122" width="90" height="4" rx="2" fill="#2ecc71" opacity=".2"/></svg>
+        <div style="padding:20px"><h4 style="font-size:1rem;font-weight:700;margin-bottom:4px">Simran T.</h4><span style="font-size:.78rem;color:#9a9a9a">Marketing Lead</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="section sec-alt">
+    <div class="rv tc"><div class="stag">Principles</div><h2 class="sec-title">What Drives Us Every Day</h2></div>
+    <div class="vals-grid" style="margin-top:40px">
+      <div class="val-item rv"><h4>🤝 Client-First Mindset</h4><p>Every decision we make is filtered through: "Is this what's best for our client?" Your success is our North Star.</p></div>
+      <div class="val-item rv"><h4>📊 Data-Driven Decisions</h4><p>We don't guess — we measure, analyse, and optimise. Every strategy is backed by data and every result is tracked.</p></div>
+      <div class="val-item rv"><h4>🚀 Innovation First</h4><p>The digital landscape evolves rapidly, and so do we. We stay ahead of trends to ensure our clients always have a competitive edge.</p></div>
+      <div class="val-item rv"><h4>🔒 Trust & Transparency</h4><p>We communicate openly, report honestly, and never overpromise. What we say, we deliver — with full transparency.</p></div>
+      <div class="val-item rv"><h4>⚡ Agility & Speed</h4><p>Speed is a competitive advantage. We work efficiently without compromising on quality or attention to detail.</p></div>
+      <div class="val-item rv"><h4>🌱 Long-Term Partnerships</h4><p>We build lasting relationships and support your growth at every stage — not just when a project is active.</p></div>
+    </div>
+  </section>
+  <div class="cta-band rv"><div><h2>Let's Write Your Success Story</h2><p>Join 100+ businesses already growing with Digital Service 24.</p></div><div class="cta-btns"><button class="btn btn-g" onclick="goTo('contact')">Get In Touch</button><button class="btn btn-ghost" onclick="goTo('whyus')">Why Choose Us →</button></div></div>
+  <div style="height:40px"></div><div id="fa"></div>
+</div>
+
+<!-- ══════════ WHY US ══════════ -->
+<div class="page" id="page-whyus">
+  <section class="phero"><div class="stag stag-dk" style="margin-bottom:20px">The DS24 Advantage</div><h1>Why Choose Us?</h1><p>In a crowded digital landscape, we stand apart through results, reliability, and relentless commitment to your success.</p></section>
+  <div class="counters">
+    <div class="ctr-item"><div class="ctr-val"><span data-c="150" data-s="+">0</span></div><div class="ctr-lbl">Projects Completed</div></div>
+    <div class="ctr-item"><div class="ctr-val"><span data-c="98" data-s="%">0</span></div><div class="ctr-lbl">Client Satisfaction Rate</div></div>
+    <div class="ctr-item"><div class="ctr-val"><span data-c="7">0</span></div><div class="ctr-lbl">Core Services</div></div>
+    <div class="ctr-item"><div class="ctr-val"><span data-c="24" data-s="/7">0</span></div><div class="ctr-lbl">Support Availability</div></div>
+  </div>
+  <section class="section">
+    <div class="split">
+      <div class="rv">
+        <div class="stag">5 Reasons</div>
+        <h2 class="sec-title">What Makes Us <span class="tgold">Genuinely Different</span></h2>
+        <div class="reason-list" style="margin-top:28px">
+          <div class="reason-item"><div class="reason-ic">📊</div><div><h4>Result-Driven Strategies</h4><p>Every campaign is backed by data. We set clear KPIs from day one and relentlessly optimise until we hit them — and then push further.</p></div></div>
+          <div class="reason-item"><div class="reason-ic">🧠</div><div><h4>Experienced & Passionate Team</h4><p>Our team combines strategic thinking with creative excellence to deliver work that genuinely moves the needle for your business.</p></div></div>
+          <div class="reason-item"><div class="reason-ic">⚡</div><div><h4>Fast Turnaround Times</h4><p>We respect your deadlines. Our streamlined processes ensure we deliver high-quality work on schedule — without cutting corners.</p></div></div>
+          <div class="reason-item"><div class="reason-ic">💰</div><div><h4>Honest, Affordable Pricing</h4><p>Premium quality at fair prices — no hidden fees. Transparent pricing so you always know exactly what you're investing in.</p></div></div>
+          <div class="reason-item"><div class="reason-ic">❤️</div><div><h4>Client Satisfaction Above All</h4><p>We don't close a project until you're truly satisfied. Open communication and genuine care set us apart.</p></div></div>
+        </div>
+      </div>
+      <!-- SVG Visual Panel -->
+      <div class="rv" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="border-radius:18px;overflow:hidden;grid-row:span 2;min-height:300px">
+          <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#0a0a0a"/></linearGradient></defs><rect width="200" height="300" fill="url(#wg1)"/><circle cx="100" cy="100" r="55" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".3"/><circle cx="100" cy="100" r="38" fill="rgba(201,168,76,.1)" stroke="#c9a84c" stroke-width="1"/><circle cx="60" cy="80" r="20" fill="#1e1e1e" stroke="#c9a84c" stroke-width="1"/><text x="60" y="86" text-anchor="middle" fill="#c9a84c" font-size="16" font-family="sans-serif">👤</text><circle cx="140" cy="80" r="20" fill="#1e1e1e" stroke="#c9a84c" stroke-width="1"/><text x="140" y="86" text-anchor="middle" fill="#c9a84c" font-size="16" font-family="sans-serif">👤</text><circle cx="100" cy="140" r="20" fill="#1e1e1e" stroke="#c9a84c" stroke-width="1"/><text x="100" y="146" text-anchor="middle" fill="#c9a84c" font-size="16" font-family="sans-serif">👤</text><line x1="78" y1="90" x2="122" y2="90" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><line x1="68" y1="100" x2="90" y2="122" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><line x1="132" y1="100" x2="110" y2="122" stroke="#c9a84c" stroke-width=".8" opacity=".5"/><text x="100" y="185" text-anchor="middle" fill="#c9a84c" font-size="10" font-weight="bold" font-family="sans-serif">TRUSTED PARTNERS</text><rect x="30" y="200" width="140" height="1" fill="rgba(201,168,76,.3)"/><rect x="25" y="215" width="150" height="60" rx="8" fill="rgba(201,168,76,.06)"/><text x="100" y="237" text-anchor="middle" fill="#fff" font-size="9" font-family="sans-serif">98% Client Satisfaction</text><rect x="35" y="244" width="130" height="6" rx="3" fill="rgba(255,255,255,.1)"/><rect x="35" y="244" width="127" height="6" rx="3" fill="#c9a84c" opacity=".8"/><text x="100" y="265" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="8" font-family="sans-serif">150+ projects delivered</text></svg>
+        </div>
+        <div style="border-radius:18px;overflow:hidden;aspect-ratio:1">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="wg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#8b5e1a"/></linearGradient></defs><rect width="200" height="200" fill="url(#wg2)"/><polygon points="100,30 130,80 185,80 145,115 160,165 100,135 40,165 55,115 15,80 70,80" fill="rgba(255,255,255,.25)"/><polygon points="100,50 122,88 165,88 132,112 144,150 100,125 56,150 68,112 35,88 78,88" fill="rgba(255,255,255,.4)"/><text x="100" y="108" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">RESULTS</text><text x="100" y="180" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9" font-family="sans-serif">DRIVEN</text></svg>
+        </div>
+        <div style="border-radius:18px;overflow:hidden;aspect-ratio:1">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="wg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2d2d2d"/><stop offset="100%" stop-color="#1a1a1a"/></linearGradient></defs><rect width="200" height="200" fill="url(#wg3)"/><rect x="30" y="120" width="20" height="50" rx="3" fill="rgba(201,168,76,.3)"/><rect x="60" y="100" width="20" height="70" rx="3" fill="rgba(201,168,76,.5)"/><rect x="90" y="75" width="20" height="95" rx="3" fill="rgba(201,168,76,.7)"/><rect x="120" y="50" width="20" height="120" rx="3" fill="#c9a84c"/><rect x="150" y="30" width="20" height="140" rx="3" fill="#e8c97a"/><polyline points="40,115 70,95 100,70 130,45 160,25" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4,3" opacity=".6"/><circle cx="160" cy="25" r="5" fill="#fff"/><text x="100" y="185" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="sans-serif">MEASURABLE GROWTH</text></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section sec-alt">
+    <div class="rv tc"><div class="stag">Our Edge</div><h2 class="sec-title">The DS24 Difference</h2></div>
+    <div class="diff-grid">
+      <div class="diff-card rv"><div class="diff-n">01</div><h3>🎯 Full-Funnel Approach</h3><p>From awareness to conversion and retention, we manage your entire digital funnel — ensuring no opportunity is missed at any stage of the customer journey.</p></div>
+      <div class="diff-card rv"><div class="diff-n">02</div><h3>📈 Measurable ROI</h3><p>Every strategy comes with clear metrics and regular reporting. You always know exactly what your investment is generating in real business value.</p></div>
+      <div class="diff-card rv"><div class="diff-n">03</div><h3>🔄 Agile & Adaptive</h3><p>Digital markets change rapidly. Our agile approach means we adapt quickly and capitalise on new opportunities when the data tells us to.</p></div>
+      <div class="diff-card rv"><div class="diff-n">04</div><h3>🛡️ No Lock-in Contracts</h3><p>We earn your trust every month. Unlike agencies that trap you in long-term contracts, we work on flexible terms because we're confident in results.</p></div>
+      <div class="diff-card rv"><div class="diff-n">05</div><h3>🌐 End-to-End Solutions</h3><p>From your first website to your thousandth social post — one team, one strategy, zero confusion, and maximum efficiency.</p></div>
+      <div class="diff-card rv"><div class="diff-n">06</div><h3>💬 24/7 Communication</h3><p>Your dedicated account manager is always reachable. We respond fast, communicate clearly, and keep you informed at every stage.</p></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="rv tc"><div class="stag">Compare</div><h2 class="sec-title">DS24 vs. Typical Agencies</h2></div>
+    <div class="rv" style="overflow-x:auto">
+      <table class="compare-table"><thead><tr><th>Feature</th><th>✦ Digital Service 24</th><th>Typical Agency</th></tr></thead><tbody>
+        <tr><td>Dedicated Account Manager</td><td><span class="chk">✓ Always included</span></td><td><span class="prt">Sometimes</span></td></tr>
+        <tr><td>Transparent Pricing</td><td><span class="chk">✓ Full transparency</span></td><td><span class="crs">✗ Often hidden fees</span></td></tr>
+        <tr><td>Monthly Performance Reports</td><td><span class="chk">✓ Detailed & actionable</span></td><td><span class="prt">Basic summaries</span></td></tr>
+        <tr><td>Flexible Contract Terms</td><td><span class="chk">✓ No lock-in</span></td><td><span class="crs">✗ 12-month lock-in</span></td></tr>
+        <tr><td>Full-Service Capability</td><td><span class="chk">✓ All 7 services in-house</span></td><td><span class="prt">Usually outsourced</span></td></tr>
+        <tr><td>Response Time</td><td><span class="chk">✓ Within 4 hours</span></td><td><span class="crs">✗ 24–48 hours</span></td></tr>
+        <tr><td>Client Satisfaction Rate</td><td><span class="chk">✓ 98%</span></td><td><span class="prt">~70–75%</span></td></tr>
+      </tbody></table>
+    </div>
+  </section>
+  <div class="testi-hero rv" style="margin-bottom:60px"><div class="stars" style="font-size:1rem">★★★★★</div><blockquote>"Switching to Digital Service 24 was the single best business decision I made this year. Our organic traffic grew by 340%, our social following doubled, and our website finally converts. They didn't just deliver — they over-delivered."</blockquote><div class="t-attr" style="margin-top:8px">— <strong>Vikram Anand</strong>, Founder of GrowthBase Solutions</div></div>
+  <div class="cta-band rv"><div><h2>Experience the Difference Yourself</h2><p>Get a free strategy consultation — no obligations, just honest advice.</p></div><div class="cta-btns"><button class="btn btn-g" onclick="goTo('contact')">Book Free Consultation</button><button class="btn btn-ghost" onclick="goTo('services')">Our Services</button></div></div>
+  <div style="height:40px"></div><div id="fw"></div>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div class="page" id="page-contact">
+  <section class="phero"><div class="stag stag-dk" style="margin-bottom:20px">Let's Connect</div><h1>Let's Work Together</h1><p>Tell us about your project and we'll get back to you within 4 hours with a clear, honest plan of action.</p></section>
+  <section class="section">
+    <div class="contact-layout">
+      <div class="rv">
+        <div class="stag">Get In Touch</div>
+        <h2 class="sec-title">Ready to <span class="tgold">Grow?</span> We're Here.</h2>
+        <p style="color:#555;font-size:.95rem;line-height:1.75;margin:16px 0 28px">Whether you have a project in mind, a question to ask, or just want to explore how we can help — we're always happy to talk.</p>
+        <a href="tel:+919814303721" class="cc-card"><div class="cc-icon">📞</div><div><div class="cc-lbl">Call Us Directly</div><div class="cc-val">+91 98143 03721</div></div></a>
+        <a href="mailto:cscservice5500@gmail.com" class="cc-card"><div class="cc-icon">✉️</div><div><div class="cc-lbl">Email Us</div><div class="cc-val">cscservice5500@gmail.com</div></div></a>
+        <div class="cc-card" onclick="openWA()" style="border-color:rgba(37,211,102,.3);background:rgba(37,211,102,.04)"><div class="cc-icon" style="background:#25D366;color:#fff">💬</div><div><div class="cc-lbl">WhatsApp Chat</div><div class="cc-val" style="color:#25D366">Message Us on WhatsApp</div></div></div>
+        <div class="cc-card" style="cursor:default"><div class="cc-icon">📍</div><div><div class="cc-lbl">Based In</div><div class="cc-val">Ludhiana, Punjab, India</div></div></div>
+        <!-- Social links in contact -->
+        <div style="margin-top:20px;background:#f9f9f9;border:1px solid #e5e5e5;border-radius:14px;padding:20px">
+          <p style="font-size:.78rem;font-weight:600;color:#9a9a9a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px">Follow Us</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="https://www.facebook.com/profile.php?id=61583574134476" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:#1877F2;color:#fff;border-radius:10px;font-size:.82rem;font-weight:600;transition:all .2s;text-decoration:none" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(24,119,242,.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">f Facebook</a>
+            <a href="https://www.instagram.com/digitalservice24online/" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;border-radius:10px;font-size:.82rem;font-weight:600;transition:all .2s;text-decoration:none" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(220,39,67,.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">◉ Instagram</a>
+            <a href="https://www.linkedin.com/company/digitlll-services-24/about/?viewAsMember=true" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:#0A66C2;color:#fff;border-radius:10px;font-size:.82rem;font-weight:600;transition:all .2s;text-decoration:none" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(10,102,194,.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">in LinkedIn</a>
+          </div>
+        </div>
+        <div style="background:#f9f9f9;border:1px solid #e5e5e5;border-radius:14px;padding:20px;margin-top:12px">
+          <h4 style="font-size:.85rem;font-weight:700;margin-bottom:12px">🕐 Working Hours</h4>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#555;padding:5px 0;border-bottom:1px solid #e5e5e5"><span>Mon – Fri</span><strong style="color:#0a0a0a">9:00 AM – 7:00 PM</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#555;padding:5px 0;border-bottom:1px solid #e5e5e5"><span>Saturday</span><strong style="color:#0a0a0a">10:00 AM – 5:00 PM</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#555;padding:5px 0"><span>Response Time</span><strong style="color:#0a0a0a">Within 4 hours</strong></div>
+        </div>
+      </div>
+      <div class="rv">
+        <div class="form-panel" id="formWrap">
+          <h3>Send Us a Message</h3>
+          <p>Fill in the form and we'll get back to you within 4 business hours.</p>
+          <div id="formBody">
+            <div class="form-row">
+              <div class="fg"><label>First Name *</label><input type="text" id="fn" placeholder="Rahul"/></div>
+              <div class="fg"><label>Last Name *</label><input type="text" id="ln" placeholder="Kumar"/></div>
+            </div>
+            <div class="form-row">
+              <div class="fg"><label>Email *</label><input type="email" id="em" placeholder="rahul@example.com"/></div>
+              <div class="fg"><label>Phone</label><input type="tel" id="ph" placeholder="+91 98765 43210"/></div>
+            </div>
+            <div class="fg"><label>Service Interested In</label>
+              <div class="chip-wrap"><div class="chip" onclick="this.classList.toggle('sel')">Web Dev</div><div class="chip" onclick="this.classList.toggle('sel')">Digital Marketing</div><div class="chip" onclick="this.classList.toggle('sel')">App Dev</div><div class="chip" onclick="this.classList.toggle('sel')">SEO</div><div class="chip" onclick="this.classList.toggle('sel')">Social Media</div><div class="chip" onclick="this.classList.toggle('sel')">Graphic Design</div><div class="chip" onclick="this.classList.toggle('sel')">Software Dev</div><div class="chip" onclick="this.classList.toggle('sel')">Other</div></div>
+            </div>
+            <div class="fg"><label>Budget Range</label><select id="bgt"><option value="" disabled selected>Select a budget range</option><option>Below ₹10,000</option><option>₹10,000 – ₹25,000</option><option>₹25,000 – ₹50,000</option><option>₹50,000 – ₹1,00,000</option><option>Above ₹1,00,000</option></select></div>
+            <div class="fg"><label>Your Message *</label><textarea id="msg" placeholder="Tell us about your project, goals, or any questions you have…"></textarea></div>
+            <button class="btn btn-p submit-btn" id="submitBtn" onclick="submitForm()">Send Message →</button>
+            <p class="form-note">🔒 Your info is kept private and never shared with third parties.</p>
+          </div>
+          <div class="success-box" id="formSuccess">
+            <div class="success-ic">✅</div>
+            <h3>Message Sent!</h3>
+            <p>Thank you! We'll get back to you within 4 hours. You can also reach us instantly on WhatsApp.</p>
+            <button class="btn btn-wa" style="margin-top:12px" onclick="openWA()">💬 Continue on WhatsApp</button>
+            <button class="btn btn-o" style="margin-top:8px" onclick="goTo('home')">Back to Home</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wa-banner rv">
+    <div class="wa-banner-ic">💬</div>
+    <div class="wa-banner-text"><h3>Prefer to Chat on WhatsApp?</h3><p>Get instant replies, share files, and discuss your project in real time. Our team is active and ready to help you right now.</p></div>
+    <div class="wa-banner-right"><button class="btn btn-wa" onclick="openWA()">💬 Open WhatsApp Chat</button><span style="font-size:.75rem;color:rgba(255,255,255,.35);text-align:center">+91 98143 03721</span></div>
+  </div>
+
+  <section class="section sec-alt">
+    <div class="rv tc"><div class="stag">Location</div><h2 class="sec-title">Find Us Here</h2></div>
+    <div class="map-ph rv">
+      <!-- SVG Map illustration -->
+      <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;display:block"><defs><linearGradient id="mapg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e8f4e8"/><stop offset="100%" stop-color="#d4e8d4"/></linearGradient></defs><rect width="600" height="320" fill="url(#mapg)"/><rect x="0" y="0" width="600" height="320" fill="#e8f0e8" opacity=".5"/><rect x="50" y="80" width="120" height="80" rx="4" fill="#d4e0c8" opacity=".8"/><rect x="200" y="60" width="80" height="60" rx="4" fill="#d4e0c8" opacity=".7"/><rect x="320" y="90" width="140" height="100" rx="4" fill="#d4e0c8" opacity=".8"/><rect x="80" y="200" width="200" height="60" rx="4" fill="#d4e0c8" opacity=".7"/><rect x="380" y="220" width="100" height="50" rx="4" fill="#d4e0c8" opacity=".6"/><rect x="0" y="150" width="600" height="12" rx="0" fill="#c8d8c0" opacity=".6"/><rect x="140" y="0" width="12" height="320" rx="0" fill="#c8d8c0" opacity=".6"/><rect x="300" y="0" width="10" height="320" rx="0" fill="#c8d8c0" opacity=".5"/><rect x="0" y="240" width="600" height="10" rx="0" fill="#c8d8c0" opacity=".4"/><circle cx="300" cy="155" r="16" fill="#0a0a0a" opacity=".9"/><circle cx="300" cy="148" r="8" fill="#c9a84c"/><line x1="300" y1="164" x2="300" y2="184" stroke="#0a0a0a" stroke-width="2"/><rect x="220" y="185" width="160" height="44" rx="8" fill="#0a0a0a" opacity=".85"/><text x="300" y="204" text-anchor="middle" fill="#c9a84c" font-size="10" font-weight="bold" font-family="sans-serif">Digital Service 24</text><text x="300" y="220" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8" font-family="sans-serif">Ludhiana, Punjab, India</text></svg>
+      <div class="map-pin" style="position:relative;z-index:3"><span>📍</span></div>
+      <h3 style="position:relative;z-index:3">Digital Service 24</h3>
+      <p style="position:relative;z-index:3">Ludhiana, Punjab, India — 141001</p>
+      <a href="https://maps.google.com/?q=Ludhiana,Punjab,India" target="_blank" class="btn btn-p" style="margin-top:8px;font-size:.82rem;position:relative;z-index:3">Open in Google Maps</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="rv tc"><div class="stag">FAQ</div><h2 class="sec-title">Common Questions</h2></div>
+    <div class="faq-grid">
+      <div class="faq-item rv" onclick="toggleFaq(this)"><div class="faq-q">How quickly will you respond?<em class="faq-ico">+</em></div><div class="faq-a"><div class="faq-a-in">We respond to all inquiries within 4 business hours. For urgent matters, call us at +91 98143 03721 or message on WhatsApp for instant replies.</div></div></div>
+      <div class="faq-item rv" onclick="toggleFaq(this)"><div class="faq-q">Do you offer free consultations?<em class="faq-ico">+</em></div><div class="faq-a"><div class="faq-a-in">Absolutely! We offer a free 30-minute strategy consultation for all new clients — no obligation, just honest valuable advice tailored to your business.</div></div></div>
+      <div class="faq-item rv" onclick="toggleFaq(this)"><div class="faq-q">What is your typical project timeline?<em class="faq-ico">+</em></div><div class="faq-a"><div class="faq-a-in">A basic website takes 1–2 weeks, complex platforms 4–8 weeks. Ongoing services like SEO or social media are monthly retainers. We give a precise timeline after our initial call.</div></div></div>
+      <div class="faq-item rv" onclick="toggleFaq(this)"><div class="faq-q">Do you work with small businesses?<em class="faq-ico">+</em></div><div class="faq-a"><div class="faq-a-in">Yes! We work with businesses of all sizes — from solopreneurs and startups to established enterprises. We tailor packages to fit your stage of growth and budget.</div></div></div>
+      <div class="faq-item rv" onclick="toggleFaq(this)"><div class="faq-q">Are there any lock-in contracts?<em class="faq-ico">+</em></div><div class="faq-a"><div class="faq-a-in">No long-term lock-ins. We work on flexible monthly terms for ongoing services. We earn loyalty through results, not contracts.</div></div></div>
+      <div class="faq-item rv" onclick="toggleFaq(this)"><div class="faq-q">Can I reach you on WhatsApp?<em class="faq-ico">+</em></div><div class="faq-a"><div class="faq-a-in">Yes! WhatsApp is our fastest channel. Click the green button anywhere on this page or message us at +91 98143 03721 for an instant response.</div></div></div>
+    </div>
+  </section>
+  <section class="section" style="padding-top:0">
+    <div style="background:#0a0a0a;border-radius:22px;padding:64px 48px;text-align:center;position:relative;overflow:hidden">
+      <div style="position:absolute;width:300px;height:300px;background:#c9a84c;border-radius:50%;filter:blur(90px);opacity:.1;left:50%;top:50%;transform:translate(-50%,-50%)"></div>
+      <div style="position:relative">
+        <div class="stag stag-dk" style="margin-bottom:20px">Let's Connect</div>
+        <h2 style="color:#fff;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;letter-spacing:-.03em;margin-bottom:16px">Let's Start Your Journey</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:1rem;max-width:480px;margin:0 auto 36px;line-height:1.7">Book a free consultation and see what's possible for your business. We respond within 4 hours — every single time.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-wa" style="font-size:.95rem;padding:14px 28px" onclick="openWA()">💬 Send Message on WhatsApp</button>
+          <button class="btn" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2);font-size:.95rem;padding:14px 28px" onclick="scrollToForm()">📝 Fill Contact Form</button>
+        </div>
+        <p style="color:rgba(255,255,255,.3);font-size:.78rem;margin-top:20px">Opens WhatsApp with +91 98143 03721</p>
+      </div>
+    </div>
+  </section>
+  <div style="height:40px"></div><div id="fc"></div>
+</div>
+
+</div>
+
+<script>
+const WA_URL='https://wa.me/919814303721';
+const FB_URL='https://www.facebook.com/profile.php?id=61583574134476';
+const IG_URL='https://www.instagram.com/digitalservice24online/';
+const LI_URL='https://www.linkedin.com/company/digitlll-services-24/about/?viewAsMember=true';
+function openWA(){window.open(WA_URL,'_blank')}
+
+const FOOTER=`<footer><div class="ft-grid"><div class="ft-brand"><div class="logo">Digital Service 24</div><p>Empowering businesses with premium digital solutions — from design to development, marketing to management.</p><div class="social-wrap"><a class="sc-a sc-fb" href="${FB_URL}" target="_blank" title="Facebook"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a class="sc-a sc-ig" href="${IG_URL}" target="_blank" title="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="sc-a sc-li" href="${LI_URL}" target="_blank" title="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a><a class="sc-a sc-wa" onclick="openWA()" title="WhatsApp" style="cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a></div></div><div class="ft-col"><h4>Pages</h4><span onclick="goTo('home')">Home</span><span onclick="goTo('services')">Services</span><span onclick="goTo('about')">About Us</span><span onclick="goTo('whyus')">Why Choose Us</span><span onclick="goTo('contact')">Contact</span></div><div class="ft-col"><h4>Services</h4><span onclick="goTo('services')">Web Development</span><span onclick="goTo('services')">Digital Marketing</span><span onclick="goTo('services')">App Development</span><span onclick="goTo('services')">SEO Optimization</span><span onclick="goTo('services')">Graphic Design</span></div><div class="ft-col"><h4>Contact</h4><div class="ft-ci"><div class="ft-ci-ic">📞</div><a href="tel:+919814303721">+91 98143 03721</a></div><div class="ft-ci"><div class="ft-ci-ic">✉️</div><a href="mailto:cscservice5500@gmail.com" style="font-size:.78rem">cscservice5500@gmail.com</a></div><div class="ft-ci" style="cursor:pointer" onclick="openWA()"><div class="ft-ci-ic">💬</div><span style="color:#25D366">WhatsApp Us</span></div><div style="margin-top:14px;display:flex;gap:8px"><a href="${FB_URL}" target="_blank" class="sc-a sc-fb" style="width:32px;height:32px"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="${IG_URL}" target="_blank" class="sc-a sc-ig" style="width:32px;height:32px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="${LI_URL}" target="_blank" class="sc-a sc-li" style="width:32px;height:32px"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a></div></div></div><div class="ft-bottom"><span>© 2026 Digital Service 24. All rights reserved.</span><span>Crafted with precision & passion</span></div></footer>`;
+['fh','fs','fa','fw','fc'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=FOOTER});
+
+function goTo(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('act'));
+  const pe=document.getElementById('page-'+pg);if(pe)pe.classList.add('active');
+  const ne=document.getElementById('nav-'+pg);if(ne)ne.classList.add('act');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(initReveal,120);setTimeout(()=>runCounters(pg),250);closeMobile();
+}
+function scrollToForm(){goTo('contact');setTimeout(()=>{const f=document.getElementById('formWrap');if(f)f.scrollIntoView({behavior:'smooth',block:'start'})},400)}
+function currentPage(){const p=document.querySelector('.page.active');return p?p.id.replace('page-',''):'home'}
+function initReveal(){
+  const pg=currentPage();
+  const obs=new IntersectionObserver((ents)=>{ents.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*70);obs.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll('#page-'+pg+' .rv:not(.vis)').forEach(el=>{const r=el.getBoundingClientRect();if(r.top<window.innerHeight+80)el.classList.add('vis');else obs.observe(el)});
+}
+function animCount(el,target,suf){
+  if(el.dataset.animated)return;el.dataset.animated='1';
+  const dur=1600,start=performance.now();
+  function tick(now){const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*target)+(suf||'');if(p<1)requestAnimationFrame(tick)}
+  requestAnimationFrame(tick);
+}
+function runCounters(pg){
+  document.querySelectorAll('#page-'+pg+' [data-c]').forEach(el=>{
+    const obs=new IntersectionObserver(ents=>{ents.forEach(e=>{if(e.isIntersecting){animCount(el,parseInt(el.dataset.c),el.dataset.s||'');obs.unobserve(el)}})},{threshold:.5});
+    obs.observe(el);
+    const r=el.getBoundingClientRect();if(r.top<window.innerHeight)animCount(el,parseInt(el.dataset.c),el.dataset.s||'');
+  });
+}
+function submitForm(){
+  const fn=document.getElementById('fn').value.trim(),em=document.getElementById('em').value.trim(),msg=document.getElementById('msg').value.trim();
+  if(!fn||!em||!msg){alert('Please fill in Name, Email, and Message.');return}
+  const btn=document.getElementById('submitBtn');btn.innerHTML='Sending…';btn.disabled=true;btn.style.opacity='.7';
+  setTimeout(()=>{document.getElementById('formBody').style.display='none';document.getElementById('formSuccess').style.display='flex'},1400);
+}
+function toggleFaq(el){const o=el.classList.contains('fopen');document.querySelectorAll('.faq-item').forEach(f=>f.classList.remove('fopen'));if(!o)el.classList.add('fopen')}
+function toggleMobile(){
+  const hbg=document.getElementById('hbg'),nl=document.getElementById('navLinks');
+  hbg.classList.toggle('hopen');
+  const open=hbg.classList.contains('hopen');
+  nl.style.cssText=open?'display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);padding:16px 24px;border-bottom:1px solid #e5e5e5;gap:4px;z-index:998':'';
+}
+function closeMobile(){const hbg=document.getElementById('hbg'),nl=document.getElementById('navLinks');hbg.classList.remove('hopen');nl.style.cssText=''}
+window.addEventListener('resize',()=>{const mob=window.innerWidth<=768;const hbg=document.getElementById('hbg'),nl=document.getElementById('navLinks');hbg.style.display=mob?'flex':'none';if(!mob){nl.style.cssText='';hbg.classList.remove('hopen')}});
+if(window.innerWidth<=768)document.getElementById('hbg').style.display='flex';
+window.addEventListener('scroll',()=>{document.getElementById('navbar').style.boxShadow=window.scrollY>10?'0 2px 16px rgba(0,0,0,.08)':'none';initReveal()});
+setTimeout(()=>{initReveal();runCounters('home')},300);
+</script>
