@@ -755,3 +755,50 @@ if(window.innerWidth<=768)document.getElementById('hbg').style.display='flex';
 window.addEventListener('scroll',()=>{document.getElementById('navbar').style.boxShadow=window.scrollY>10?'0 2px 16px rgba(26,62,212,.1)':'none';initReveal()});
 setTimeout(()=>{initReveal();runCounters('home')},280);
 </script>
+<div id="contact-section" style="padding:40px; background:#f8f9fb; border-radius:12px; margin:40px 0;">
+  <h2 style="text-align:center;">Contact Us</h2>
+
+  <div style="max-width:500px; margin:auto; display:flex; flex-direction:column; gap:10px;">
+
+    <input id="name" placeholder="Your Name" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+
+    <input id="phone" placeholder="Phone Number" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+
+    <textarea id="message" placeholder="Your Message" style="padding:10px; border:1px solid #ccc; border-radius:6px;"></textarea>
+
+    <button onclick="sendForm()" style="padding:12px; background:#2563eb; color:white; border:none; border-radius:6px; cursor:pointer;">
+      Submit Inquiry
+    </button>
+
+  </div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB5j4Bb8M_ADXx1vORWM9V445zrkNHUTGk",
+  authDomain: "digital-service-24.firebaseapp.com",
+  projectId: "digital-service-24",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.sendForm = async function () {
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const message = document.getElementById("message").value;
+
+  await addDoc(collection(db, "inquiries"), {
+    name,
+    phone,
+    message,
+    type: "Website Form",
+    status: "New",
+    time: new Date()
+  });
+
+  alert("Inquiry Sent Successfully!");
+};
+</script>
