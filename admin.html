@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - Digital Service 24</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5j4Bb8M_ADXx1vORWM9V445zrkNHUTGk",
+      authDomain: "digital-service-24.firebaseapp.com",
+      projectId: "digital-service-24",
+      storageBucket: "digital-service-24.firebasestorage.app",
+      messagingSenderId: "156112503685",
+      appId: "1:156112503685:web:861cde74f1a0ae49ccbaec",
+      measurementId: "G-MCRXYLB12C"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    window.login = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadData();
+      } catch (e) {
+        alert("Login Failed");
+      }
+    };
+
+    async function loadData() {
+      const querySnapshot = await getDocs(collection(db, "inquiries"));
+      let html = "";
+
+      querySnapshot.forEach((docSnap) => {
+        const d = docSnap.data();
+        html += `
+          <tr>
+            <td>${d.name}</td>
+            <td>${d.phone}</td>
+            <td>${d.message}</td>
+            <td>${d.type}</td>
+            <td>${d.status || "New"}</td>
+            <td>
+              <button onclick="updateStatus('${docSnap.id}', 'Completed')">Done</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      document.getElementById("data").innerHTML = html;
+    }
+
+    window.updateStatus = async function (id, status) {
+      const ref = doc(db, "inquiries", id);
+      await updateDoc(ref, { status: status });
+      loadData();
+    };
+  </script>
+
+  <style>
+    body { font-family: Arial; background:#111; color:#fff; }
+    .box { max-width:400px; margin:50px auto; }
+    input, button { width:100%; padding:10px; margin:5px 0; }
+    table { width:100%; margin-top:20px; border-collapse: collapse; }
+    td, th { border:1px solid #555; padding:10px; }
+  </style>
+</head>
+
+<body>
+
+<div id="loginBox" class="box">
+  <h2>Admin Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="dashboard" style="display:none;">
+  <h2>Dashboard</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Message</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="data"></tbody>
+  </table>
+</div>
+
+</body>
+</html>
